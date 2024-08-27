@@ -1,6 +1,5 @@
-from sqlalchemy import Column, Integer, String, DateTime, BigInteger, ForeignKey
+from sqlalchemy import Column, Integer, String, DateTime, BigInteger, Boolean
 from sqlalchemy.sql import func
-from sqlalchemy.orm import relationship
 from app.db.database import Base
 
 
@@ -12,16 +11,37 @@ class User(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
     updated_by = Column(BigInteger)
-    is_deleted = Column(Integer, default=0)
+    is_deleted = Column(Boolean, default=False)
 
-    login_histories = relationship("UserLoginHistory", back_populates="user")
+
+class UserEmail(Base):
+    __tablename__ = "t_user_emails"
+
+    id = Column(BigInteger, primary_key=True, index=True)
+    user_id = Column(BigInteger, index=True)
+    email = Column(String(255), unique=True, nullable=False)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
+    updated_by = Column(BigInteger)
+    is_deleted = Column(Boolean, default=False)
 
 
 class UserLoginHistory(Base):
     __tablename__ = "t_user_login_histories"
 
-    id = Column(BigInteger, primary_key=True, index=True, autoincrement=True)
-    user_id = Column(BigInteger, ForeignKey("m_users.id"), nullable=False)
+    id = Column(BigInteger, primary_key=True, index=True)
+    user_id = Column(BigInteger, index=True)
     login_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
 
-    user = relationship("User", back_populates="login_histories")
+
+class UserPassword(Base):
+    __tablename__ = "t_user_passwords"
+
+    id = Column(BigInteger, primary_key=True, index=True)
+    user_id = Column(BigInteger, index=True)
+    password = Column(String(255), nullable=False)
+    is_latest = Column(Boolean, default=True)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
+    updated_by = Column(BigInteger)
+    is_deleted = Column(Boolean, default=False)
