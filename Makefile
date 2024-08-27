@@ -15,6 +15,12 @@ logs:
 web:
 	docker-compose exec web bash
 
+db:
+	docker-compose exec db bash
+
+config:
+	docker-compose config
+
 tree:
 	tree -I 'venv|__pycache__|mysql-data' .
 
