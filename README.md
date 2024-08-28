@@ -58,6 +58,35 @@
 - Swagger UI: `http://localhost:8080/docs`
 - ReDoc: `http://localhost:8080/redoc`
 
+## データベースマイグレーション
+
+このプロジェクトではAlembicを使用してデータベースマイグレーションを管理しています。以下のコマンドを使用してマイグレーションを実行できます：
+
+- 新しいマイグレーションの作成:
+  ```
+  make migrate-revision message="変更の説明"
+  ```
+
+- マイグレーションの適用:
+  ```
+  make migrate-upgrade
+  ```
+
+- 直前のリビジョンへのダウングレード:
+  ```
+  make migrate-downgrade
+  ```
+
+- マイグレーション履歴の表示:
+  ```
+  make migrate-history
+  ```
+
+- 現在のリビジョンの表示:
+  ```
+  make migrate-current
+  ```
+
 ## 開発
 
 新機能の追加や既存機能の修正を行う場合：
@@ -68,6 +97,14 @@
 4. `app/repositories/` にデータアクセスロジックを実装します。
 5. `app/services/` にビジネスロジックを追加します。
 6. 必要に応じて `app/main.py` を更新し、新しいルーターを追加します。
+
+## マイグレーションの開発フロー
+
+1. モデル（`app/models/`）を変更または新規作成します。
+2. 新しいマイグレーションを生成します: `make migrate-revision message="変更の説明"`
+3. 生成されたマイグレーションファイル（`alembic/versions/`内）を確認し、必要に応じて編集します。
+4. マイグレーションを適用します: `make migrate-upgrade`
+5. アプリケーションを再起動し、変更が正しく反映されていることを確認します。
 
 ## テスト
 
