@@ -4,6 +4,13 @@ sqlalchemy
 pymysql
 python-dotenv
 pydantic
+pydantic[email]
 pydantic-settings
 cryptography
 aiomysql
+passlib
+email-validator
+mysqlclient
+bcrypt
+alembic
+greenlet

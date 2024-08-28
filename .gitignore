@@ -162,3 +162,19 @@ cython_debug/
 #.idea/
 
 mysql-data/
+
+# Alembic関連
+alembic/versions/*
+!alembic/versions/.gitkeep
+
+# IDEとエディタ
+.vscode/
+*.swp
+*.swo
+
+# OS生成ファイル
+.DS_Store
+Thumbs.db
+
+# ログファイル
+*.log

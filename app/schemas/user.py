@@ -1,5 +1,6 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
 from datetime import datetime
+from typing import Optional
 
 
 class UserBase(BaseModel):
@@ -7,15 +8,20 @@ class UserBase(BaseModel):
 
 
 class UserCreate(UserBase):
-    pass
+    email: EmailStr
+    password: str
 
 
 class User(UserBase):
     id: int
     created_at: datetime
     updated_at: datetime
-    updated_by: int
-    is_deleted: int
+    updated_by: Optional[int] = None
+    is_deleted: bool
 
     class Config:
-        orm_mode = True
+        from_attributes = True
+
+
+class UserInDB(User):
+    hashed_password: str

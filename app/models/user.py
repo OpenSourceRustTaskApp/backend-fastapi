@@ -10,7 +10,7 @@ class User(Base):
     username = Column(String(20), index=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
-    updated_by = Column(BigInteger)
+    updated_by = Column(BigInteger, nullable=True)
     is_deleted = Column(Boolean, default=False)
 
 
@@ -22,7 +22,7 @@ class UserEmail(Base):
     email = Column(String(255), unique=True, nullable=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
-    updated_by = Column(BigInteger)
+    updated_by = Column(BigInteger, nullable=True)
     is_deleted = Column(Boolean, default=False)
 
 
@@ -43,5 +43,5 @@ class UserPassword(Base):
     is_latest = Column(Boolean, default=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
-    updated_by = Column(BigInteger)
+    updated_by = Column(BigInteger, nullable=True)
     is_deleted = Column(Boolean, default=False)
