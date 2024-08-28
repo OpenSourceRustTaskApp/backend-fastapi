@@ -34,5 +34,7 @@ async def get_users(
 async def create_user(user: UserCreate, db: AsyncSession = Depends(get_db)):
     try:
         return await UserService.create_user(db, user)
+    except HTTPException as e:
+        raise e
     except Exception as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        raise HTTPException(status_code=500, detail="An unexpected error occurred")
