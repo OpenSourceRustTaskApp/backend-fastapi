@@ -5,6 +5,9 @@ from app.core.config import settings
 from app.core.security import verify_password, create_access_token
 from app.repositories.user_repository import UserRepository
 from app.models.user import UserLoginHistory
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class AuthService:
@@ -19,8 +22,10 @@ class AuthService:
         :return: アクセストークンとトークンタイプを含む辞書
         :raises HTTPException: 認証失敗時に発生
         """
+        logger.info(f"Attempting to authenticate user: {email}")
         user = await UserRepository.get_user_by_email(db, email)
         if not user:
+            logger.warning(f"Authentication failed: User not found for email: {email}")
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="メールアドレスまたはパスワードが正しくありません",
@@ -29,6 +34,7 @@ class AuthService:
 
         latest_password = await UserRepository.get_latest_password(db, user.user_id)
         if not latest_password or not verify_password(password, latest_password.password):
+            logger.warning(f"Authentication failed: Invalid password for user: {email}")
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="メールアドレスまたはパスワードが正しくありません",
@@ -42,5 +48,6 @@ class AuthService:
         login_history = UserLoginHistory(user_id=user.user_id)
         db.add(login_history)
         await db.commit()
+        logger.info(f"Authentication successful: Access token generated for user: {email}")
 
         return {"access_token": access_token, "token_type": "bearer"}
